@@ -2,6 +2,7 @@
 
 using UnityEngine;
 
+[System.Serializable]
 public struct SPoint
 {
     public int m_iX;

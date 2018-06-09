@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class CBoard : MonoBehaviour
     [SerializeField]
     private SOLevelData m_LevelData;
 
+    [SerializeField]
+    private STileTypeToPrefab[] m_PrefabToTileType;
 
     /// <summary>
     ///  Structure where tiles references are kept. 
@@ -21,11 +24,33 @@ public class CBoard : MonoBehaviour
 
     private void Awake()
     {
+        m_dBoardTiles = new Dictionary<SPoint, CTile>();
+
+        m_v2Size = new Vector2(10f, 10f);  //DEBUG - TODO: Do proper logic with SOLevelData
+
         if (m_LevelData)
         {
             foreach (STileData tile in m_LevelData.m_lTiles)
             {
+                bool bFound = false;
+                foreach (STileTypeToPrefab mapping in m_PrefabToTileType)
+                {
+                    if (mapping.type == tile.eType)
+                    {
+                        GameObject tileObject =  GameObject.Instantiate(mapping.prefab, (Vector3) tile.position, Quaternion.identity);
+                        CTile tileComponent = tileObject.GetComponent<CTile>();
+                        tileComponent.Coordinates = tile.position;
 
+                        AddTile(tileComponent);
+
+                        bFound = true;
+                    }
+
+                }
+                if (! bFound)
+                {
+                    Debug.LogWarning("Tile type not mapped found");
+                }
             }
         }
     }
@@ -60,4 +85,18 @@ public class CBoard : MonoBehaviour
     {
         m_v2Size = v2Size;
     }
+
+
+
+}
+
+/// <summary>
+/// Class used when loading level data from Scriptable Object.
+/// Maps a tile type to a prefab
+/// </summary>
+[Serializable]
+public struct STileTypeToPrefab
+{
+    public CTile.ETileType type;
+    public GameObject prefab; 
 }

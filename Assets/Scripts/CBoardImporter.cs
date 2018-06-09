@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -100,7 +99,7 @@ public class CBoardImporter : MonoBehaviour
         soLevelData.m_lTiles = lLevelData;
 
 
-        string sPath = Application.dataPath + "Resources/LevelsData";
+        string sPath = Application.dataPath + "/Resources/LevelsData";
         if (! Directory.Exists(sPath))
         {
             AssetDatabase.CreateFolder("Assets/Resources", "LevelsData");

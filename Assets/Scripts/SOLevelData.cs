@@ -9,8 +9,10 @@ public class SOLevelData : ScriptableObject
 }
 
 //Struct - tile data 
+[System.Serializable]
 public struct STileData
 {
+    [SerializeField]
     public SPoint position;
     public CTile.ETileType eType;
 }
